@@ -33,7 +33,7 @@ function captionCardsReducer(state = initialState, action) {
       const newState = {
         ...state,
         loading: false,
-        captions: [...state.captions, action.payload],
+        tags: [...action.payload],
       };
 
       return newState;

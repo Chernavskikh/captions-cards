@@ -4,64 +4,54 @@
  *
  */
 
-import React, { useState } from 'react';
-import { Input, Button } from 'semantic-ui-react';
+import React from 'react';
+import { Search, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import Tag from '../Tag';
 
-function SearchForm(props) {
-  const [query, setQuery] = useState('');
-  const [queryTags, queryTagsHandler] = useState([]);
+class SearchForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  function keyPress(e) {
-    if (e.key === 'Enter') {
-      queryTagsHandler(arr => arr.concat(query));
-      setQuery('');
-    }
+    this.state = {
+      options: props.tagOptions,
+      searchValue: '',
+      results: [],
+    };
   }
 
-  function removeTag(id) {
-    const index = queryTags.indexOf(id);
-    queryTagsHandler(arr => arr.filter((item, i) => i !== index));
-  }
+  // eslint-disable-next-line consistent-return
+  handleSearchChange = (e, { value }) => {
+    this.setState({ searchValue: value });
+    const keyword = value.toLowerCase();
+    const filteredResults = this.state.options.filter(function(obj) {
+      const objTitle = obj.title.toLowerCase();
+      return objTitle.indexOf(keyword) > -1;
+    });
 
-  return (
-    <div>
-      <Input
-        className="mb-20 mt-20"
-        placeholder="Search..."
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        onKeyDown={keyPress}
-      />
+    this.setState({
+      results: filteredResults,
+    });
+  };
 
-      <Button
-        type="button"
-        className="ui primary button"
-        onClick={props.getCaptions}
-        loading={props.isDataLoading}
-      >
-        Fetch captions
-      </Button>
+  render() {
+    return (
+      <div className="mb-20 mt-20">
+        <Header size="large">Search captions by tags</Header>
 
-      <div>
-        {/* TODO: add unique key generator here to avoid duplicated keys */}
-        {queryTags.map(item => (
-          <Tag
-            queryText={item}
-            key={item}
-            id={item}
-            removeHandler={removeTag}
-          />
-        ))}
+        <Search
+          className="mb-20 mt-20"
+          value={this.state.searchValue}
+          input={{ icon: 'search' }}
+          onSearchChange={this.handleSearchChange}
+          results={this.state.results}
+        />
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 SearchForm.propTypes = {
-  getCaptions: PropTypes.func.isRequired,
-  isDataLoading: PropTypes.bool,
+  tagOptions: PropTypes.array,
 };
 
 export default SearchForm;

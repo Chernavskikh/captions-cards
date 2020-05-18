@@ -7,7 +7,7 @@ export function getData() {
   return {
     type: FETCH_DATA,
   };
-};
+}
 
 export function dataLoaded(res) {
   return {

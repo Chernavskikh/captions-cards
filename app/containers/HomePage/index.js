@@ -5,39 +5,43 @@
  *
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import SearchForm from 'components/SearchForm';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
+import { uniq } from 'lodash';
 import { getData } from './actions';
 import saga from './saga';
 
 function HomePage(props) {
+  useEffect(() => {
+    props.getTags();
+  }, []);
+
   return (
     <Container>
-      <SearchForm
-        getCaptions={props.getCaptions}
-        isDataLoading={props.isDataLoading}
-      />
+      <SearchForm tagOptions={props.tagOptions} />
     </Container>
   );
 }
 
 const mapStateToProps = state => ({
-  cards: state.capCards.captions,
+  tagOptions: uniq(state.capCards.tags).map(i => ({
+    title: i,
+  })),
   isDataLoading: state.capCards.loading,
 });
 
 const mapDispatchToProps = dispatch => ({
-  getCaptions: () => dispatch(getData()),
+  getTags: () => dispatch(getData()),
 });
 
 HomePage.propTypes = {
-  getCaptions: PropTypes.func,
-  isDataLoading: PropTypes.bool,
+  getTags: PropTypes.func,
+  tagOptions: PropTypes.array,
 };
 const withConnect = connect(
   mapStateToProps,
