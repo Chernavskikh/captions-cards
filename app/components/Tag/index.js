@@ -6,27 +6,29 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import TagCrossButton from './TagCrossButton';
+import TagStyled from './TagStyled';
 
 function Tag(props) {
   return (
-    <span>
+    <TagStyled>
       {props.queryText}
-      <button
+      <TagCrossButton
         type="button"
         onClick={() => {
           props.removeHandler(props.id);
         }}
       >
-        x
-      </button>
-    </span>
+        &#10005;
+      </TagCrossButton>
+    </TagStyled>
   );
 }
 
 Tag.propTypes = {
   queryText: PropTypes.string.isRequired,
   removeHandler: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default Tag;

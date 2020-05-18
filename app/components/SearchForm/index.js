@@ -5,10 +5,11 @@
  */
 
 import React, { useState } from 'react';
-import { Input } from 'semantic-ui-react';
+import { Input, Button } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import Tag from '../Tag';
 
-function SearchForm() {
+function SearchForm(props) {
   const [query, setQuery] = useState('');
   const [queryTags, queryTagsHandler] = useState([]);
 
@@ -27,11 +28,21 @@ function SearchForm() {
   return (
     <div>
       <Input
+        className="mb-20 mt-20"
         placeholder="Search..."
         value={query}
         onChange={e => setQuery(e.target.value)}
         onKeyDown={keyPress}
       />
+
+      <Button
+        type="button"
+        className="ui primary button"
+        onClick={props.getCaptions}
+        loading={props.isDataLoading}
+      >
+        Fetch captions
+      </Button>
 
       <div>
         {/* TODO: add unique key generator here to avoid duplicated keys */}
@@ -47,5 +58,10 @@ function SearchForm() {
     </div>
   );
 }
+
+SearchForm.propTypes = {
+  getCaptions: PropTypes.func.isRequired,
+  isDataLoading: PropTypes.bool,
+};
 
 export default SearchForm;
