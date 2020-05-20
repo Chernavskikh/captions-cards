@@ -3,13 +3,14 @@
  * CapCards reducer
  *
  */
-import { FETCH_DATA, FETCH_SUCCESS, FETCH_ERROR } from './actions';
-
-export function fetchPosts() {
-  return {
-    type: FETCH_DATA,
-  };
-}
+import {
+  FETCH_TAGS_DATA,
+  FETCH_TAGS_SUCCESS,
+  FETCH_TAGS_ERROR,
+  FETCH_CAPTIONS_DATA,
+  FETCH_CAPTIONS_SUCCESS,
+  FETCH_CAPTIONS_ERROR,
+} from './actions';
 
 export const initialState = {
   tags: [],
@@ -21,7 +22,7 @@ export const initialState = {
 /* eslint-disable default-case, no-param-reassign */
 function captionCardsReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_DATA: {
+    case FETCH_TAGS_DATA: {
       const newState = {
         ...state,
         loading: true,
@@ -29,7 +30,7 @@ function captionCardsReducer(state = initialState, action) {
 
       return newState;
     }
-    case FETCH_SUCCESS: {
+    case FETCH_TAGS_SUCCESS: {
       const newState = {
         ...state,
         loading: false,
@@ -39,7 +40,29 @@ function captionCardsReducer(state = initialState, action) {
       return newState;
     }
 
-    case FETCH_ERROR: {
+    case FETCH_TAGS_ERROR: {
+      return { ...state, error: action.error, loading: false };
+    }
+
+    case FETCH_CAPTIONS_DATA: {
+      const newState = {
+        ...state,
+        loading: true,
+      };
+
+      return newState;
+    }
+    case FETCH_CAPTIONS_SUCCESS: {
+      const newState = {
+        ...state,
+        loading: false,
+        captions: [...action.payload],
+      };
+
+      return newState;
+    }
+
+    case FETCH_CAPTIONS_ERROR: {
       return { ...state, error: action.error, loading: false };
     }
 

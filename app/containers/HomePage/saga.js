@@ -5,7 +5,14 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { API_URL } from 'utils/constants';
-import { dataLoaded, dataError, FETCH_DATA } from './actions';
+import {
+  dataTagsLoaded,
+  dataTagsError,
+  dataCaptionsLoaded,
+  dataCaptionsError,
+  FETCH_TAGS_DATA,
+  FETCH_CAPTIONS_DATA,
+} from './actions';
 
 /**
  * get data request/response handler
@@ -16,9 +23,21 @@ export function* getTagsData() {
   try {
     // Call our request helper (see 'utils/request')
     const res = yield call(request, requestURL);
-    yield put(dataLoaded(res.data.tags));
+    yield put(dataTagsLoaded(res.data.tags));
   } catch (err) {
-    yield put(dataError(err));
+    yield put(dataTagsError(err));
+  }
+}
+
+export function* getCaptionsData() {
+  const requestURL = `${API_URL}/caption/`;
+
+  try {
+    // Call our request helper (see 'utils/request')
+    const res = yield call(request, requestURL);
+    yield put(dataCaptionsLoaded(res.data.captions));
+  } catch (err) {
+    yield put(dataCaptionsError(err));
   }
 }
 
@@ -30,5 +49,6 @@ export default function* data() {
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
   // It will be cancelled automatically on component unmount
-  yield takeLatest(FETCH_DATA, getTagsData);
+  yield takeLatest(FETCH_TAGS_DATA, getTagsData);
+  yield takeLatest(FETCH_CAPTIONS_DATA, getCaptionsData);
 }

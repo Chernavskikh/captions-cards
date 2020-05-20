@@ -13,12 +13,13 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
 import { uniq } from 'lodash';
-import { getData } from './actions';
+import { getTagsData, getCaptionsData } from './actions';
 import saga from './saga';
 
 function HomePage(props) {
   useEffect(() => {
     props.getTags();
+    props.getCaptions();
   }, []);
 
   return (
@@ -36,11 +37,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getTags: () => dispatch(getData()),
+  getTags: () => dispatch(getTagsData()),
+  getCaptions: () => dispatch(getCaptionsData()),
 });
 
 HomePage.propTypes = {
   getTags: PropTypes.func,
+  getCaptions: PropTypes.func,
   tagOptions: PropTypes.array,
 };
 const withConnect = connect(
