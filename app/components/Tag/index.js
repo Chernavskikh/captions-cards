@@ -16,7 +16,7 @@ function Tag(props) {
       <TagCrossButton
         type="button"
         onClick={() => {
-          props.removeHandler(props.id);
+          props.removeHandler(props.queryText);
         }}
       >
         &#10005;
@@ -28,7 +28,6 @@ function Tag(props) {
 Tag.propTypes = {
   queryText: PropTypes.string.isRequired,
   removeHandler: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
 };
 
 export default Tag;
